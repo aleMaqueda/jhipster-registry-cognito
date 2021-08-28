@@ -200,7 +200,7 @@ jhipster:
     oauth2:
       audience:
         - account
-        - api://default
+        - ${JHIPSTER_REGISTRY_COGNITO_ID}
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

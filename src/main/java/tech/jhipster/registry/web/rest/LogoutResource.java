@@ -34,12 +34,11 @@ public class LogoutResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout URL and ID token.
      */
     @PostMapping("/api/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request, @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
-        String logoutUrl = this.registration.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString();
-
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        
         Map<String, String> logoutDetails = new HashMap<>();
-        logoutDetails.put("logoutUrl", logoutUrl);
-        logoutDetails.put("idToken", idToken.getTokenValue());
+        logoutDetails.put("logoutUrl", "https://jhipster-is-awesome.auth.us-east-1.amazoncognito.com/logout");
+        logoutDetails.put("clientId", registration.getClientId());
         request.getSession().invalidate();
         return ResponseEntity.ok().body(logoutDetails);
     }

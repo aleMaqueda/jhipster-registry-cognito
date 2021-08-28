@@ -34,12 +34,16 @@ import tech.jhipster.registry.security.AuthoritiesConstants;
 import tech.jhipster.registry.security.SecurityUtils;
 import tech.jhipster.registry.security.oauth2.AudienceValidator;
 import tech.jhipster.registry.security.oauth2.JwtGrantedAuthorityConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
 @Profile(Constants.PROFILE_OAUTH2)
 public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final Logger log = LoggerFactory.getLogger(OAuth2SecurityConfiguration.class);
 
     private final String issuerUri;
 
@@ -147,10 +151,11 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     // each scope as a GrantedAuthority, which we don't care about.
                     if (authority instanceof OidcUserAuthority) {
                         OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                        mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
+                        mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromAttributes(oidcUserAuthority.getAttributes()));
                     }
                 }
             );
+            log.info("{}",mappedAuthorities);
             return mappedAuthorities;
         };
     }
